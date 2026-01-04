@@ -34,7 +34,7 @@ Siga os passos abaixo para rodar o projeto localmente.
 ### 1. Clone o Repositório
 
 ```bash
-git clone https://github.com/seu-usuario/bookflow.git
+git clone (https://github.com/Alfonso-Neto/BookFlow.git
 cd bookflow
 ```
 
