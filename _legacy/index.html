@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookFlow - Gerenciamento de Livros</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Login View -->
+        <div id="login-view" class="login-page hidden">
+            <div class="login-card">
+                <div class="login-header">
+                    <h2>BookFlow</h2>
+                    <p>Entre para gerenciar sua biblioteca</p>
+                </div>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" class="form-control" placeholder="admin@bookflow.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Senha</label>
+                        <input type="password" id="password" class="form-control" placeholder="123" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%">Entrar</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Main Layout -->
+        <div id="main-layout" class="hidden" style="display: flex; width: 100%;">
+            <nav class="sidebar">
+                <div class="brand">
+                    <i class="fas fa-book-reader" style="color: var(--primary)"></i>
+                    BookFlow
+                </div>
+                <ul class="nav-links">
+                    <li class="nav-item active" data-target="dashboard">
+                        <i class="fas fa-home"></i> Dashboard
+                    </li>
+                    <li class="nav-item" data-target="books">
+                        <i class="fas fa-book"></i> Livros
+                    </li>
+                    <li class="nav-item" data-target="loans">
+                        <i class="fas fa-hand-holding"></i> Empréstimos
+                    </li>
+                    <li class="nav-item logout-btn" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </li>
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <header>
+                    <h1 id="page-title">Dashboard</h1>
+                    <div class="user-profile">
+                        <span id="user-name">Admin</span>
+                    </div>
+                </header>
+
+                <!-- Dashboard View -->
+                <div id="dashboard-view" class="view-section">
+                    <div class="stats-grid">
+                        <div class="card">
+                            <div class="card-icon"><i class="fas fa-book"></i></div>
+                            <div class="card-info">
+                                <h3>Total de Livros</h3>
+                                <p id="stat-total">0</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="card-info">
+                                <h3>Disponíveis</h3>
+                                <p id="stat-available">0</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon"><i class="fas fa-book-open"></i></div>
+                            <div class="card-info">
+                                <h3>Emprestados</h3>
+                                <p id="stat-borrowed">0</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon"><i class="fas fa-clock"></i></div>
+                            <div class="card-info">
+                                <h3>Empréstimos Ativos</h3>
+                                <p id="stat-active">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Books View -->
+                <div id="books-view" class="view-section hidden">
+                    <div class="flex-between">
+                        <h2>Gerenciar Livros</h2>
+                        <button class="btn btn-primary" id="add-book-btn"><i class="fas fa-plus"></i> Novo Livro</button>
+                    </div>
+                    
+                    <!-- Add/Edit Book Form (Hidden by default) -->
+                    <div id="book-form-container" class="form-container hidden" style="margin-bottom: 30px;">
+                        <h3 style="margin-bottom: 20px;" id="book-form-title">Novo Livro</h3>
+                        <form id="book-form">
+                            <input type="hidden" id="book-id">
+                            <div class="form-group">
+                                <label>Título</label>
+                                <input type="text" id="book-title" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Autor</label>
+                                <input type="text" id="book-author" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Categoria</label>
+                                <input type="text" id="book-category" class="form-control" required>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                                <div class="form-group">
+                                    <label>Ano</label>
+                                    <input type="number" id="book-year" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>ISBN</label>
+                                    <input type="text" id="book-isbn" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="action-buttons" style="justify-content: flex-end;">
+                                <button type="button" class="btn btn-danger" id="cancel-book-btn">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Salvar</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Título</th>
+                                    <th>Autor</th>
+                                    <th>Categoria</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="books-table-body">
+                                <!-- Rows generated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Loans View -->
+                <div id="loans-view" class="view-section hidden">
+                    <div class="flex-between">
+                        <h2>Controle de Empréstimos</h2>
+                        <button class="btn btn-primary" id="add-loan-btn"><i class="fas fa-plus"></i> Novo Empréstimo</button>
+                    </div>
+
+                    <!-- Add Loan Form -->
+                    <div id="loan-form-container" class="form-container hidden" style="margin-bottom: 30px;">
+                        <h3 style="margin-bottom: 20px;">Novo Empréstimo</h3>
+                        <form id="loan-form">
+                            <div class="form-group">
+                                <label>Livro</label>
+                                <select id="loan-book-select" class="form-control" required>
+                                    <!-- Options generated by JS -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Usuário</label>
+                                <select id="loan-user-select" class="form-control" required>
+                                    <!-- Options generated by JS -->
+                                </select>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                                <div class="form-group">
+                                    <label>Data Empréstimo</label>
+                                    <input type="date" id="loan-date" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Data Devolução</label>
+                                    <input type="date" id="return-date" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="action-buttons" style="justify-content: flex-end;">
+                                <button type="button" class="btn btn-danger" id="cancel-loan-btn">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Registrar</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Usuário</th>
+                                    <th>Livro</th>
+                                    <th>Empréstimo</th>
+                                    <th>Devolução</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="loans-table-body">
+                                <!-- Rows generated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+    <script type="module" src="app.js"></script>
+</body>
+</html>
